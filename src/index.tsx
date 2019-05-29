@@ -12,7 +12,10 @@ export default function createStorage<V>(
   parse?: () => any,
   stringify?: () => any,
 ): [React.FunctionComponent, StateHook<V>] {
-  const storedValue: V = JSON.parse(localStorage.getItem(key) || 'null', parse)
+  const storedValue: V = JSON.parse(
+    (typeof localStorage === 'object' && localStorage.getItem(key)) || 'null',
+    parse,
+  )
   const initialValue = storedValue != null ? storedValue : fallbackValue
 
   const ValueContext = createContext(initialValue)
@@ -26,7 +29,8 @@ export default function createStorage<V>(
     const [value, setValue] = useState(initialValue)
 
     useEffect(() => {
-      localStorage.setItem(key, JSON.stringify(value, stringify))
+      typeof localStorage === 'object' &&
+        localStorage.setItem(key, JSON.stringify(value, stringify))
     }, [value])
 
     return (

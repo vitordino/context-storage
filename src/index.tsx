@@ -6,17 +6,17 @@ type StateHook<V> = () => [V | undefined, (v: V) => void]
 /* prettier-ignore */
 const noop = () => {/* noop */}
 
+const isBrowser: boolean = typeof localStorage === 'object'
+
 export default function createStorage<V>(
   key: string,
   fallbackValue?: V,
   parse?: () => any,
   stringify?: () => any,
 ): [React.FunctionComponent, StateHook<V>] {
-  const storedValue: V = JSON.parse(
-    (typeof localStorage === 'object' && localStorage.getItem(key)) || 'null',
-    parse,
-  )
-  const initialValue = storedValue != null ? storedValue : fallbackValue
+  const storageString: string = isBrowser && localStorage.getItem(key) || 'null'
+  const storedValue: V = JSON.parse(storageString, parse)
+  const initialValue: any = storedValue != null ? storedValue : fallbackValue
 
   const ValueContext = createContext(initialValue)
   const SetterContext = createContext(noop)
@@ -29,8 +29,8 @@ export default function createStorage<V>(
     const [value, setValue] = useState(initialValue)
 
     useEffect(() => {
-      typeof localStorage === 'object' &&
-        localStorage.setItem(key, JSON.stringify(value, stringify))
+      if(!isBrowser) return
+      localStorage.setItem(key, JSON.stringify(value, stringify))
     }, [value])
 
     return (

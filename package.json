@@ -39,10 +39,7 @@
         "statements": 100
       }
     },
-    "preset": "jest-preset-typescript",
-    "setupFiles": [
-      "jest-localstorage-mock"
-    ]
+    "preset": "jest-preset-typescript"
   },
   "peerDependencies": {
     "react": "^16.8.0"

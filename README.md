@@ -58,6 +58,7 @@ export const App = () => (
 | **fallback** | `any`             | fallback when localStorage is empty    |
 | **replacer** | `function︱array` | [passed to `JSON.stringify`][replacer] |
 | **reviver**  | `function`        | [passed to `JSON.parse`][reviver]      |
+| **storage**  | `object`          | with `getItem` and `setItem` methods   |
 
 ## Implementation
 
